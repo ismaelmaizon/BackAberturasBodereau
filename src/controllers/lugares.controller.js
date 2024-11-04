@@ -28,13 +28,10 @@ export const createLugar = async (req, res) => {
 
 export const deleteLugar = async (req, res) => {
   const {id} = req.params
-  const {fullname} = req.body
-  console.log(fullname);
   console.log(id);
-  
   try {
     const [rows] = await pool.query("DELETE FROM lugares where id = ?", [id]);
-    res.send( {status: 200, message: 'succes', response: rows} );
+    res.send( {status: 200, message: 'lugar eliminado', response: rows} );
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Something goes wrong" });

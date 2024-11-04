@@ -24,9 +24,7 @@ const app = express();
 const corsOptions = {
   //To allow requests from client
   origin: [
-    "https://beige-buffalo-119903.hostingersite.com",
-    "http://localhost:5173",
-    "localhost:8080"
+    "http://localhost:5173","http://167.88.32.78",
   ],
   credentials: true,
   exposedHeaders: ["set-cookie"],

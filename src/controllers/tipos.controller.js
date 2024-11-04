@@ -14,6 +14,8 @@ export const getTipos = async (req, res) => {
 
 export const createTipos = async (req, res) => {
     const { Tipo, Descripcion } = req.body
+    console.log(Tipo, Descripcion);
+    
     try {
         const [rows] = await pool.query("INSERT INTO tipos (Tipo, Descripcion) VALUES (?,?);",
             [Tipo, Descripcion]
@@ -24,4 +26,19 @@ export const createTipos = async (req, res) => {
         console.log(error);
         return res.status(500).json({ message: "Something goes wrong" });
       }
+}
+
+
+export const deleteTipos = async (req, res) => {
+  const { id } = req.params
+  try {
+      const [rows] = await pool.query("DELETE FROM tipos WHERE id = ?",
+          [id]
+      );
+      
+      res.send( {status: 200, message: 'tipo eliminado', response: rows} );
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Something goes wrong" });
+    }
 }

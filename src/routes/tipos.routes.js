@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTipos, getTipos } from "../controllers/tipos.controller.js";
+import { createTipos, deleteTipos, getTipos } from "../controllers/tipos.controller.js";
 
 
 
@@ -11,5 +11,6 @@ router.post('/createTipo', createTipos)
 router.get('/getTipos', getTipos)
 //obtener tipo
 //router.get('/getTipo/:id', )
+router.delete('/deleteTipo/:id', deleteTipos)
 
 export default router
