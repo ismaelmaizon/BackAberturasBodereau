@@ -62,7 +62,7 @@ export const createProducto = async (req, res) => {
             "INSERT INTO productos (IdGenerate, Tipo, Ancho, Alto, Izq, Derc, Precio_U, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
             [idGenerate, Tipo, Ancho, Alto, Izq, Derc, Precio_U, stock]
           );
-          res.status(200).json({ message: 'producto creado con exito' });
+          res.status(200).json({ message: 'producto creado con exito', product: idGenerate });
         }catch(err){
           console.log(err);
           res.status(400).json({ message: 'problemas al crear el producto', error: err });
@@ -78,7 +78,7 @@ export const createProducto = async (req, res) => {
               "INSERT INTO imagenes (IdProduct, url) VALUES (?, ?);",
               [idGenerate, file.filename]
             );
-            res.status(200).json({ message: 'producto creado con exito' });
+            res.status(200).json({ message: 'producto creado con exito', product: idGenerate });
           }catch(err){
             console.log(err);
             res.status(400).json({ message: 'problemas al agregar imagen del producto', error: err });

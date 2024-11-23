@@ -16,7 +16,7 @@ router.put("/upDateStockProducto/:idg", upDateStockProducto)
 
 router.post("/addProductoLugar/:idg", addproductolugar)
 router.post("/updateProductoLugar/:idg", updateproductolugar)
-router.post("/deleteProductoLugar/:idg", deleteproductolugar)
+router.post("/deleteProductoLugar/:id", deleteproductolugar)
 
 
 

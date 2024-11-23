@@ -143,45 +143,13 @@ export const updateproductolugar = async (req, res) =>{
 
 //sacar producto de un lugar
 export const deleteproductolugar = async (req, res) =>{
-    const {idg} = req.params 
-    const {id_lugar, stock} = req.body
-    let { id, newStock } = 0
+    const {id} = req.params 
     try{
         //busqueda de prodcuto
-        const [rowProducto] = await pool.query("SELECT * FROM productos WHERE IdGenerate = ?",
-            [idg]
+        const [rowProducto] = await pool.query("delete FROM lugaresProducto where id = ?",
+            [id]
         );
-        let id_producto = rowProducto[0].id
-        //actualiazcion de stock
-        //validacion de existencia previa
-        const [exists] = await pool.query("SELECT * FROM lugaresProducto WHERE id_producto = ?",
-            [id_producto]
-        );
-        console.log(exists);
-        console.log('cantidad de lugares donde se encuentra: ', exists.length);
-        if (exists.length == 0){
-            res.send( {status: 400, message: 'El producto no se encuentra en ninguna ubicacion'} );
-        }else{
-            let value = false
-            for (let i = 0; i < exists.length; i++){
-                let prod = exists[i]
-                if (prod.id_lugar == id_lugar) {
-                    value = false
-                    newStock = prod.stock - stock;
-                    id = prod.id
-                    break  //fin de la iteracion
-                }else{
-                    value = true
-                }
-            }
-            if(value){
-                res.send( {status: 400, message: 'El producto no se encuentra en la ubicacion dada'} );
-            }else{
-                //actualizar stock en lugar
-                const [updateStock] = await pool.query("UPDATE lugaresProducto SET stock = ? WHERE id = ?", [newStock, id])
-                res.send( {status: 200, message: 'succes', response: updateStock} );
-            }
-        };
+        res.send( {status: 200, message: 'producto eliminado de ese lugar'} );
     }catch(error) {
         return res.status(500).json({ message: "Something goes wrong" });
   }
@@ -225,6 +193,8 @@ export const upDateStockProducto = async (req, res) =>{
     try{
          //busqueda de prodcuto
         const [Producto] = await pool.query("SELECT * FROM productos WHERE IdGenerate = ?",[idg])
+        console.log(Producto);
+        
         let id_producto = Producto[0].id
         const [row] = await pool.query("SELECT * FROM lugaresProducto WHERE id_producto = ?",[id_producto])
         console.log(row);
