@@ -1,7 +1,8 @@
 import { pool } from "../db.js";
 import {DataTime, generarIDAleatorio} from "../utils.js";
-import fs from 'fs-extra';
-
+import fs from 'fs';
+import path from "path";
+import __dirname from "../utils.js";
 
 
 //ver todos los productos
@@ -245,17 +246,24 @@ export const deleteImgProducto = async (req, res) => {
       id,
     ]);
     console.log(rows);
+    console.log(rows[0].url);
     if (rows) {
       try{
         const [row] = await pool.query("delete FROM imagenes WHERE id = ?", [
           id,
         ]);
-        const response = fs.remove(`../img/${rows[0].url}`, err => {
-          if (err) return console.error(err)
-          console.log('success!')
-        })
-        console.log(response);
-        res.status(200).json({message: 'imagen eliminada'});
+        // Construye la ruta absoluta de la imagen
+        const imagePath = path.join(__dirname,'img', rows[0].url);
+
+        // Verifica si el archivo existe antes de intentar eliminarlo
+        if (fs.existsSync(imagePath)) {
+          // Elimina el archivo usando unlink
+          await fs.promises.unlink(imagePath);
+          res.status(200).json({ message: 'Imagen eliminada exitosamente.' });
+        } else {
+          res.status(404).json({ error: 'Archivo no encontrado.' });
+        }
+        
       }catch(err){
         console.log(err);
         return res.status(500).json({ message: "Something goes wrong" });
@@ -269,3 +277,5 @@ export const deleteImgProducto = async (req, res) => {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
+
+

@@ -44,6 +44,7 @@ router.delete("/producto/:id", deleteProducto);
 router.delete("/deleteproductoImg/:id", deleteImgProducto);
 
 
+
 // UPDATE un producto
 
 export default router;
