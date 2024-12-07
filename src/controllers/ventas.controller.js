@@ -1,4 +1,3 @@
-
 import { pool } from "../db.js";
 import { DataTime, generarIDAleatorioVentas } from "../utils.js";
 
@@ -46,7 +45,6 @@ export const registrarProdVenta = async (req, res) =>{
 
 } 
 
-
 //get ventas
 export const getVentas = async (req, res) =>{
   console.log('cookies');
@@ -93,7 +91,6 @@ export const getVentaId = async (req, res) =>{
   }
 
 } 
-
 
 //modificar venta
 export const modVenta = async (req, res) =>{
@@ -162,4 +159,43 @@ export const modVenta = async (req, res) =>{
 */
 } 
 
+//eliminar venta
+export const deleteVenta = async (req, res) =>{
+  const { id } = req.params;
+  console.log(id);
+  try {
+      const [rows] = await pool.query("SELECT * FROM ventasproduct WHERE id_venta = ?;",[id]);
+      if(rows.length != 0){
+        try{
+          const [rows2] = await pool.query("DELETE FROM ventasproduct WHERE id_venta = ?;",[id]);
+          console.log(rows);
+          if (rows2.length != 0) {
+            try{
+              const [rows3] = await pool.query("DELETE FROM ventas WHERE id_venta = ?;",[id]);
+              res.status(200).json({ status: 200, message: 'venta eliminada'});
+  
+            }catch(err){
+              console.log(err);
+              return res.status(500).json({ message: "problemas al eliminar venta" });
+            }
+          }
+        }catch(err){
+          console.log(err);
+          return res.status(500).json({ message: "problemas al eliminar los productos de esa venta" });    
+        }
+      }else{        
+        try{
+          const [rows3] = await pool.query("DELETE FROM ventas WHERE id_venta = ?;",[id]);
+          res.status(200).json({ status: 200, message: 'venta eliminada'});
+        }catch(err){
+          console.log(err);
+          return res.status(500).json({ message: "Something goes wrong" });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "no se encontraron productos con ese ID" });
+    }
 
+
+}

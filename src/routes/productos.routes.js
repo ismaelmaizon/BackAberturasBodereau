@@ -4,6 +4,7 @@ import {
   createProducto,
   deleteImgProducto,
   deleteProducto,
+  getProductMostSold,
   getProducto,
   getProductoIms,
   getProductos,
@@ -25,13 +26,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 // GET todos los /productos
-router.get("/prod", (req, res)=>{ res.send({status:200, message: 'probando probando'}) });
-
-
 router.get("/productos", getProductos);
 // GET un producto
 router.get("/producto/:idg", getProducto);
 router.get("/productoimg/:idg", getProductoIms);
+//GET producto mas vendido
+router.get("/productoMostSold", getProductMostSold)
 // INSERT un producto
 router.post("/producto", upload.single('file') , createProducto);
 // INSERT imagen a producto

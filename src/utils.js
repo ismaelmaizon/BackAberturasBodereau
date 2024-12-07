@@ -74,13 +74,13 @@ export const generarIDAleatorio = (longitud) => {
 //generar ID venta
 export const generarIDAleatorioVentas = (longitud) => {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const numbers = '0123456789abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
     let resultadoCaracteres = '';
     let resultadoNumeros = '';
     const caracteresLength = caracteres.length;
     const numbersLength = numbers.length;
 
-    for (let i = 0; i < longitud; i++) {
+    for (let i = 0; i < longitud-1; i++) {
         resultadoCaracteres += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
     }
     for (let i = 0; i < longitud-5; i++) {
@@ -88,7 +88,7 @@ export const generarIDAleatorioVentas = (longitud) => {
     }
     console.log(resultadoCaracteres);
     console.log(resultadoNumeros);
-    const id = `${resultadoNumeros}${resultadoCaracteres}`
+    const id = `${resultadoNumeros}@${resultadoCaracteres}`
 
     return id;
 }

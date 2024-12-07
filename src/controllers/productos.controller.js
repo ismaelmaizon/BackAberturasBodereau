@@ -35,6 +35,30 @@ export const getProducto = async (req, res) => {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
+//ver producto mas vendido
+export const getProductMostSold = async (req, res) =>{
+  try {
+    const [rows] = await pool.query(`SELECT id_producto, COUNT(*) as frecuencia
+       FROM ventasProduct
+       GROUP BY id_producto
+       ORDER BY frecuencia DESC
+       LIMIT 1;`,[]);
+  
+    if (rows.length <= 0) {
+      return res.status(404).json({ message: "producto not found" });
+    }
+
+    console.log(rows);
+    console.log(rows[0]);
+    
+    res.send( {status: 200, message: 'succes', response: rows} );
+
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+}
+}
+
+
 //crear producto
 export const createProducto = async (req, res) => {
   // Accede al archivo subido
