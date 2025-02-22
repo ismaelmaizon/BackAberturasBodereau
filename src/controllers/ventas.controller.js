@@ -3,37 +3,67 @@ import { DataTime, generarIDAleatorioVentas } from "../utils.js";
 
 //registrar venta
 export const registrarVenta = async (req, res) =>{
-    const {cliente, total} = req.body
+    const {cliente, total, descuento} = req.body
+    console.log(descuento);
+    
     const fecha = DataTime()
     const id_venta = generarIDAleatorioVentas(10)
     const estado = 1
     const { nombre, apellido, email, cel, provincia, localidad, calle, altura } = cliente
-    
-    try {
+    if (descuento != null) {
+      let estadoDesc = 1
+      try {
         const [rows] = await pool.query(
-            "INSERT INTO ventas (id_venta, fecha, nombre, apellido, email, provincia, localidad, calle, altura, cel, estado, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",[
-              id_venta, fecha, nombre, apellido, email, provincia, localidad, calle, parseInt(altura) , cel, estado, total]
-          );
-        console.log(rows);
-        if (rows) {
-          res.status(200).json({ status: 200, message: 'registro creado', id: id_venta});
+              `INSERT INTO ventas (id_venta, fecha, nombre, apellido, 
+              email, provincia, localidad, calle, altura, cel, estado, 
+              total, descuento, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
+                id_venta, fecha, nombre, apellido, email, provincia, 
+                localidad, calle, parseInt(altura) , cel, estado, total, descuento, estadoDesc]
+              );
+              console.log(rows);
+              if (rows) {
+                res.status(200).json({ status: 200, message: 'registro creado', id: id_venta});
+              }
+            } catch (error) {
+          console.log(error);
+          
+          return res.status(500).json({ message: "Something goes wrong" });
         }
-      } catch (error) {
-        console.log(error);
         
-        return res.status(500).json({ message: "Something goes wrong" });
-      }
+      }else{
+      let estadoDesc = 0  
+      try {
+        const [rows] = await pool.query(
+              `INSERT INTO ventas (id_venta, fecha, nombre, apellido, 
+              email, provincia, localidad, calle, altura, cel, estado, 
+              total, descuento, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
+                id_venta, fecha, nombre, apellido, email, provincia, 
+                localidad, calle, parseInt(altura) , cel, estado, total, descuento, estadoDesc]
+              );
+              console.log(rows);
+              if (rows) {
+                res.status(200).json({ status: 200, message: 'registro creado', id: id_venta});
+              }
+            } catch (error) {
+          console.log(error);
+          
+          return res.status(500).json({ message: "Something goes wrong" });
+        }
+
+    }
 
 } 
 
 //Asociar producto a venta
 export const registrarProdVenta = async (req, res) =>{
-  const {id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal} = req.body
+  const {id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar} = req.body
+  console.log('id_lugar');
+  console.log(id_lugar);
   console.log(id_venta);
   try {
       const [rows] = await pool.query(
-          "INSERT INTO ventasProduct (id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal) VALUES (?, ?, ?, ?, ?, ?);",[
-            id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal]
+          "INSERT INTO ventasProduct (id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar) VALUES (?, ?, ?, ?, ?, ?, ?);",[
+            id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar]
         );
       console.log(rows);
       if (rows) {
