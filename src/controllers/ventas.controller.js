@@ -68,10 +68,10 @@ export const registrarProdVenta = async (req, res) =>{
       console.log(rows);
       if (rows) {
         console.log(rows);
-        
+        cd
         res.status(200).json({  status: 200, message: 'producto agregado', response: rows});
       }
-    } catch (error) {
+    } catch (error) {cd
       console.log(error);
       return res.status(500).json({ message: "Something goes wrong" });
     }
