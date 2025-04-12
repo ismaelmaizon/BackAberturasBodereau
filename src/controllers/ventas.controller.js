@@ -3,22 +3,22 @@ import { DataTime, generarIDAleatorioVentas } from "../utils.js";
 
 //registrar venta
 export const registrarVenta = async (req, res) =>{
-    const {cliente, total, descuento} = req.body
-    console.log(descuento);
+    const {cliente, total, estadoDesc} = req.body
+    console.log(estadoDesc);
     
     const fecha = DataTime()
     const id_venta = generarIDAleatorioVentas(10)
     const estado = 1
     const { nombre, apellido, email, cel, provincia, localidad, calle, altura } = cliente
-    if (descuento != null) {
+    if (estadoDesc) {
       let estadoDesc = 1
       try {
         const [rows] = await pool.query(
               `INSERT INTO ventas (id_venta, fecha, nombre, apellido, 
               email, provincia, localidad, calle, altura, cel, estado, 
-              total, descuento, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
+              total, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
                 id_venta, fecha, nombre, apellido, email, provincia, 
-                localidad, calle, parseInt(altura) , cel, estado, total, descuento, estadoDesc]
+                localidad, calle, parseInt(altura) , cel, estado, total, estadoDesc]
               );
               console.log(rows);
               if (rows) {
@@ -36,9 +36,9 @@ export const registrarVenta = async (req, res) =>{
         const [rows] = await pool.query(
               `INSERT INTO ventas (id_venta, fecha, nombre, apellido, 
               email, provincia, localidad, calle, altura, cel, estado, 
-              total, descuento, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
+              total, estadoDesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,[
                 id_venta, fecha, nombre, apellido, email, provincia, 
-                localidad, calle, parseInt(altura) , cel, estado, total, descuento, estadoDesc]
+                localidad, calle, parseInt(altura) , cel, estado, total, estadoDesc]
               );
               console.log(rows);
               if (rows) {
@@ -56,22 +56,21 @@ export const registrarVenta = async (req, res) =>{
 
 //Asociar producto a venta
 export const registrarProdVenta = async (req, res) =>{
-  const {id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar} = req.body
+  const {id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar, descuento} = req.body
   console.log('id_lugar');
   console.log(id_lugar);
   console.log(id_venta);
   try {
       const [rows] = await pool.query(
-          "INSERT INTO ventasProduct (id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar) VALUES (?, ?, ?, ?, ?, ?, ?);",[
-            id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar]
+          "INSERT INTO ventasProduct (id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar, descuento) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",[
+            id_venta, id_producto, IdGenerate, Tipo, cantidad, subtotal, id_lugar, descuento]
         );
       console.log(rows);
       if (rows) {
         console.log(rows);
-        cd
         res.status(200).json({  status: 200, message: 'producto agregado', response: rows});
       }
-    } catch (error) {cd
+    } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Something goes wrong" });
     }
@@ -201,12 +200,17 @@ export const deleteVenta = async (req, res) =>{
       if(rows.length != 0){
         try{
           const [rows2] = await pool.query("DELETE FROM ventasproduct WHERE id_venta = ?;",[id]);
+          console.log('rows');
           console.log(rows);
+          console.log('rows2');
+          console.log(rows2);
           if (rows2.length != 0) {
             try{
               const [rows3] = await pool.query("DELETE FROM ventas WHERE id_venta = ?;",[id]);
+              console.log('rows3');
+              console.log(rows3);
+              
               res.status(200).json({ status: 200, message: 'venta eliminada'});
-  
             }catch(err){
               console.log(err);
               return res.status(500).json({ message: "problemas al eliminar venta" });
@@ -219,6 +223,8 @@ export const deleteVenta = async (req, res) =>{
       }else{        
         try{
           const [rows3] = await pool.query("DELETE FROM ventas WHERE id_venta = ?;",[id]);
+          console.log('rows3');
+          console.log(rows3);
           res.status(200).json({ status: 200, message: 'venta eliminada'});
         }catch(err){
           console.log(err);

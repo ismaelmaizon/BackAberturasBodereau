@@ -55,7 +55,7 @@ app.use("/api/tipos", autenticacion, tiposRoutes);
 app.use("/api/productos", autenticacion, productosRoutes);
 app.use("/api/lugares", autenticacion,lugaresRoutes);
 app.use("/api/lugaresProd", autenticacion,lugaresRoutesProd);
-app.use("/api/ventas", autenticacion,ventasRoutes);
+app.use("/api/ventas", autenticacion, ventasRoutes);
 
 
 app.use((req, res, next) => {

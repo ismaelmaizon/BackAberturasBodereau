@@ -224,18 +224,45 @@ export const deleteProducto = async (req, res) => {
 
     try{
       //verificar existencia de imagenes
-      const [imgProd] = await pool.query("delete FROM imagenes where IdProduct = ?", [
+      const [imgProdExist] = await pool.query("select * FROM imagenes where IdProduct = ?", [
         product[0].IdGenerate,
       ]);
-      if (imgProd.affectedRows >= 0) {
+      console.log('Info: ');
+      console.log(imgProdExist);
+
+      imgProdExist.map( async (el)=>{
+        // Construye la ruta absoluta de la imagen
+        const imagePath = path.join(__dirname,'img', el.url);
+
+        console.log('Info: ');
+        console.log(el.url);
+        console.log(imagePath);
+        
+        // Verifica si el archivo existe antes de intentar eliminarlo
+        if (fs.existsSync(imagePath)) {
+          // Elimina el archivo usando unlink
+          await fs.promises.unlink(imagePath);
+        } else {
+          res.status(404).json({ error: 'Archivo no encontrado.' });
+        }
+
+      })
+
+      const [imgProdDelete] = await pool.query("delete FROM imagenes where IdProduct = ?", [
+        product[0].IdGenerate,
+      ]);
+
+      if (imgProdDelete.affectedRows >= 0) {
         boolImgProd = true
       }
+      
     }catch(err){
       console.log(err);
       return res.status(500).json({ message: "problemas al eliminar imagenes del producto" });
     }
     
     if (boolImgProd && boolLugProd) {
+      
       try{
         const [rows] = await pool.query("delete FROM productos where id = ?", [
           id,
