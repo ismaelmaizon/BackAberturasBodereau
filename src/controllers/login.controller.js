@@ -55,10 +55,10 @@ export const login = async (req, res) => {
         console.log(token);
         const cookiesOptions = {
             maxAge: 21600000,
-            httpOnly: false,
-            secure: true, // Solo HTTPS
-            sameSite: 'None' // Mitigar ataques CSRF  
-        }
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Lax'
+            }
         res.cookie('jwt', token, cookiesOptions)
         res.send({status: 200, message: 'Bien venido', response: tockenRol})
     }catch(err){
@@ -95,9 +95,11 @@ export const autenticacion = async (req, res, next) => {
 export const logout = async (req, res) =>{
     console.log(req.cookies.jwt);
     const cookiesOptions = {
-        maxAge: 2, 
-        httpOnly: true    
+    maxAge: 0,
+    httpOnly: true,
+    secure: false,
+    sameSite: 'Lax'
     }
-    res.cookie('jwt', '', cookiesOptions)    
-    res.status(401).json({ message: 'Logout successful' }); 
+    res.cookie('jwt', '', cookiesOptions)
+    return res.status(200).json({ message: 'Logout successful' }) 
 }
