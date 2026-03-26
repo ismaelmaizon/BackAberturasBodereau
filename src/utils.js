@@ -22,8 +22,7 @@ export const encriptarPass = async (password) => {
 export const validarPass = async (password, hash) => {
     // Verificar si una contraseña ingresada coincide con el hash almacenado
     const result =  await bcrypt.compare(password, hash)
-        // `result` será `true` si la contraseña coincide con el hash
-    console.log('Coincide la contraseña:', result); // Resultado: false
+    // `result` será `true` si la contraseña coincide con el hash
     return result
 };
 
@@ -41,54 +40,32 @@ export const DataTime = () => {
 
     // Format date and time
     const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    console.log("Current date and time:", formattedDateTime);
     return formattedDateTime
 }
 
 
+// Generar ID aleatorio seguro
+export const generarIDAleatorio = (longitud = 12) => {
+  const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let resultado = "";
 
-//generar ID
-export const generarIDAleatorio = (longitud) => {
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const numbers = '0123456789';
-    let resultadoCaracteres = '';
-    let resultadoNumeros = '';
-    const caracteresLength = caracteres.length;
-    const numbersLength = numbers.length;
+  const bytes = crypto.randomBytes(longitud);
+  for (let i = 0; i < longitud; i++) {
+    resultado += caracteres[bytes[i] % caracteres.length];
+  }
 
-    for (let i = 0; i < longitud; i++) {
-        resultadoCaracteres += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
-    }
-    for (let i = 0; i < longitud-5; i++) {
-        resultadoNumeros += numbers.charAt(Math.floor(Math.random() * numbersLength));
-    }
-    console.log(resultadoCaracteres);
-    console.log(resultadoNumeros);
-    const id = `${resultadoNumeros}${resultadoCaracteres}`
+  return resultado;
+};
 
-    return id;
-}
+// Generar ID de venta
+export const generarIDAleatorioVentas = (longitud = 12) => {
+  const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let resultado = "";
 
+  const bytes = crypto.randomBytes(longitud);
+  for (let i = 0; i < longitud; i++) {
+    resultado += caracteres[bytes[i] % caracteres.length];
+  }
 
-//generar ID venta
-export const generarIDAleatorioVentas = (longitud) => {
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const numbers = '0123456789';
-    let resultadoCaracteres = '';
-    let resultadoNumeros = '';
-    const caracteresLength = caracteres.length;
-    const numbersLength = numbers.length;
-
-    for (let i = 0; i < longitud-1; i++) {
-        resultadoCaracteres += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
-    }
-    for (let i = 0; i < longitud-5; i++) {
-        resultadoNumeros += numbers.charAt(Math.floor(Math.random() * numbersLength));
-    }
-    console.log(resultadoCaracteres);
-    console.log(resultadoNumeros);
-    const id = `${resultadoNumeros}@${resultadoCaracteres}`
-
-    return id;
-}
+  return `V-${resultado}`;
+};

@@ -13,6 +13,8 @@ import {
 import __dirname  from '../utils.js'
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import { soloAdmin } from "../controllers/login.controller.js";
+import { uploadProducto } from "../middlewares/uploadProducto.js";
 
 const router = Router();
 
@@ -33,15 +35,15 @@ router.get("/productoimg/:idg", getProductoIms);
 //GET producto mas vendido
 router.get("/productoMostSold", getProductMostSold)
 // INSERT un producto
-router.post("/producto", upload.single('file') , createProducto);
+router.post("/producto", soloAdmin, uploadProducto.single("file"), createProducto);
 // INSERT imagen a producto
-router.post("/addimgProduct", upload.single('file') , addImgProducto);
+router.post("/addimgProduct", soloAdmin, uploadProducto.single('file') , addImgProducto);
 //update producto
-router.post("/updateProduct", updateProducto);
+router.post("/updateProduct", soloAdmin, updateProducto);
 // DELETE un producto
-router.delete("/producto/:id", deleteProducto);
+router.delete("/producto/:id", soloAdmin, deleteProducto);
 // DELETE imagen de un producto
-router.delete("/deleteproductoImg/:id", deleteImgProducto);
+router.delete("/deleteproductoImg/:id", soloAdmin, deleteImgProducto);
 
 
 
