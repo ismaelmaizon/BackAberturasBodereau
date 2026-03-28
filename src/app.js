@@ -21,10 +21,11 @@ import __dirname from "./utils.js";
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://167.88.32.78",
+  //"http://localhost:5173",
+  //"http://167.88.32.78",
   // si después usás dominio o subdominio, agregarlo acá
   // "https://stock.tudominio.com"
+  "https://appstock.aberturasbodereau.com"
 ];
 
 const corsOptions = {
