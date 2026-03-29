@@ -4,7 +4,7 @@ import { autenticacion, login, logout, reg, soloAdmin } from "../controllers/log
 const router = Router();
 
 // registrar usuario
-router.post("/reg", autenticacion, soloAdmin, reg);
+//router.post("/reg", autenticacion, soloAdmin, reg);
 
 // login
 router.post("/log", login);
