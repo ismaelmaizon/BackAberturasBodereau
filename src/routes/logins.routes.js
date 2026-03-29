@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { login, logout, reg, soloAdmin } from "../controllers/login.controller.js";
+import { autenticacion, login, logout, reg, soloAdmin } from "../controllers/login.controller.js";
 
 const router = Router();
 
 // registrar usuario
-router.post("/reg", soloAdmin, reg);
+router.post("/reg", autenticacion, soloAdmin, reg);
 
 // login
 router.post("/log", login);
